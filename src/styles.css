@@ -10,6 +10,9 @@ button { cursor: pointer; }
 header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 44px; }
 .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.04em; font-size: 1.25rem; }
 .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; background: var(--ink); color: var(--lime); border-radius: 50%; font-size: .82rem; }
+.top-menu { display: flex; align-items: center; margin-left: auto; }
+.menu-link { color: var(--ink); padding: 7px 12px; text-decoration: none; font-size: .8rem; }
+.menu-link.active { background: var(--lime); font-weight: 600; }
 .date { color: var(--muted); font-family: 'DM Mono', monospace; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; padding-top: 8px; }
 .intro { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 28px; margin-bottom: 34px; }
 h1 { max-width: 600px; margin: 0; font-size: clamp(2.8rem, 7vw, 5.5rem); line-height: .91; letter-spacing: -.075em; font-weight: 600; }
