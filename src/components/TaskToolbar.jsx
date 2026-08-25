@@ -1,4 +1,4 @@
-function TaskToolbar({ filter, setFilter, activeCount, deletedCount }) {
+function TaskToolbar({ filter, setFilter, contextFilter, setContextFilter, activeCount, deletedCount, contextOptions }) {
   return (
     <div className="list-head">
       <div className="panel-label list-title">
@@ -11,6 +11,20 @@ function TaskToolbar({ filter, setFilter, activeCount, deletedCount }) {
         <button className={`tab ${filter === 'deleted' ? 'active' : ''}`} onClick={() => setFilter('deleted')}>
           Eliminadas {deletedCount > 0 && `(${deletedCount})`}
         </button>
+      </div>
+      <div className="context-tabs" aria-label="Filtrar por contexto">
+        <button className={`context-tab ${contextFilter === 'all' ? 'active' : ''}`} onClick={() => setContextFilter('all')}>
+          Todas
+        </button>
+        {contextOptions.map((option) => (
+          <button
+            key={option}
+            className={`context-tab ${contextFilter === option ? 'active' : ''}`}
+            onClick={() => setContextFilter(option)}
+          >
+            {option}
+          </button>
+        ))}
       </div>
     </div>
   );

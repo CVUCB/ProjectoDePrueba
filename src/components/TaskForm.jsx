@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 
-function TaskForm({ editingTask, onSave, onCancel }) {
+function TaskForm({ editingTask, onSave, onCancel, contextOptions }) {
   const [name, setName] = useState(editingTask?.name ?? '');
+  const [context, setContext] = useState(editingTask?.context ?? contextOptions[0]);
 
   useEffect(() => {
     setName(editingTask?.name ?? '');
-  }, [editingTask]);
+    setContext(editingTask?.context ?? contextOptions[0]);
+  }, [editingTask, contextOptions]);
 
   function submit(event) {
     event.preventDefault();
     const cleanName = name.trim();
-    if (cleanName) onSave(cleanName);
+    if (cleanName) onSave(cleanName, context);
   }
 
   return (
@@ -27,6 +29,14 @@ function TaskForm({ editingTask, onSave, onCancel }) {
         placeholder="Ej. Diseñar el flujo de inicio"
         autoFocus
       />
+
+      <label htmlFor="task-context">Contexto / tipo de energía</label>
+      <select id="task-context" value={context} onChange={(event) => setContext(event.target.value)}>
+        {contextOptions.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
+
       <button className="primary" type="submit">
         {editingTask ? 'Guardar cambios' : 'Añadir tarea'} <span aria-hidden="true">↗</span>
       </button>
