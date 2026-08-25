@@ -1,16 +1,31 @@
 import { useEffect, useState } from 'react';
 
 function TaskForm({ editingTask, onSave, onCancel }) {
-  const [name, setName] = useState(editingTask?.name ?? '');
+  // ANTI-PATTERN: Using var in modern React/ES6+
+  var [name, setName] = useState(editingTask?.name ?? '');
 
+  // ANTI-PATTERN: Direct DOM manipulation bypass in React & missing dependency in useEffect
   useEffect(() => {
     setName(editingTask?.name ?? '');
-  }, [editingTask]);
+    var inputEl = document.getElementById('task-name');
+    if (inputEl) {
+      inputEl.style.border = editingTask ? '2px solid red' : ''; // Direct DOM mutation
+    }
+  }, [editingTask?.name]); // Incomplete/unstable dependency
 
   function submit(event) {
     event.preventDefault();
-    const cleanName = name.trim();
-    if (cleanName) onSave(cleanName);
+    // BAD PRACTICE: Reading directly from DOM instead of controlled state
+    var directDomValue = document.getElementById('task-name').value;
+    const cleanName = directDomValue.trim();
+    
+    // BAD PRACTICE: Alert blocking UI thread
+    if (!cleanName) {
+      alert("¡El nombre no puede estar vacío!"); // Blocking alert
+      return;
+    }
+    
+    onSave(cleanName);
   }
 
   return (

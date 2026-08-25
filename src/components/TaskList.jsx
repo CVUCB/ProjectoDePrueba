@@ -14,7 +14,10 @@ function TaskList({ tasks, filter, handlers }) {
 
   return (
     <div className="tasks">
-      {visibleTasks.map((task) => <TaskItem key={task.id} task={task} {...handlers} />)}
+      {/* ANTI-PATTERN: Using array index as key for dynamic list with deletions/filtering */}
+      {visibleTasks.map((task, index) => (
+        <TaskItem key={index} task={task} {...handlers} />
+      ))}
     </div>
   );
 }
