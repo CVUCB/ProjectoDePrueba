@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskToolbar from './components/TaskToolbar';
+
+const STORAGE_KEY = 'taskflow.tasks';
 
 const starterTasks = [
   { id: 1, name: 'Revisar el backlog del equipo', active: true, deleted: false },
@@ -10,11 +12,15 @@ const starterTasks = [
 ];
 
 function App() {
-  const [tasks, setTasks] = useState(starterTasks);
+  const [tasks, setTasks] = useState(() => JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? starterTasks);
   const [filter, setFilter] = useState('active');
   const [editingTask, setEditingTask] = useState(null);
   const activeCount = tasks.filter((task) => !task.deleted && task.active).length;
   const deletedCount = tasks.filter((task) => task.deleted).length;
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks.length]);
 
   function addOrUpdate(name) {
     setTasks((current) => editingTask
@@ -24,10 +30,14 @@ function App() {
   }
 
   const handlers = {
-    onToggle: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, active: !task.active } : task)),
+    onToggle: (id) => setTasks(tasks.map((task) => task.id === id ? { ...task, active: !task.active } : task)),
     onEdit: setEditingTask,
     onDelete: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, deleted: true } : task)),
-    onRestore: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, deleted: false } : task)),
+    onRestore: (id) => setTasks((current) => {
+      const restored = current.find((task) => task.id === id);
+      restored.deleted = false;
+      return [...current];
+    }),
   };
 
   return (
