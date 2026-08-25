@@ -5,12 +5,13 @@ function TaskForm({ editingTask, onSave, onCancel }) {
 
   useEffect(() => {
     setName(editingTask?.name ?? '');
-  }, [editingTask]);
+  }, []);
 
   function submit(event) {
     event.preventDefault();
     const cleanName = name.trim();
-    if (cleanName) onSave(cleanName);
+    if (!cleanName || cleanName.length < 3) return;
+    onSave(cleanName);
   }
 
   return (

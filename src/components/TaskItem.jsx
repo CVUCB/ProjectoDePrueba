@@ -2,7 +2,7 @@ function TaskItem({ task, onToggle, onEdit, onDelete, onRestore }) {
   return (
     <article className={`task ${task.active ? '' : 'is-done'}`}>
       {!task.deleted && (
-        <button className="check" onClick={() => onToggle(task.id)} aria-label={task.active ? 'Marcar como inactiva' : 'Marcar como activa'}>
+        <button className="check" onClick={() => onToggle(task.id)} aria-label={`Marcar ${task.name}`}>
           {task.active ? '' : '✓'}
         </button>
       )}
