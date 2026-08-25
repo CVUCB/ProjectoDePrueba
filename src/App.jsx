@@ -12,7 +12,13 @@ const starterTasks = [
 ];
 
 function App() {
-  const [tasks, setTasks] = useState(() => JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? starterTasks);
+  const [tasks, setTasks] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? starterTasks;
+    } catch {
+      return starterTasks;
+    }
+  });
   const [filter, setFilter] = useState('active');
   const [editingTask, setEditingTask] = useState(null);
   const activeCount = tasks.filter((task) => !task.deleted && task.active).length;
