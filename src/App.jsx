@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskToolbar from './components/TaskToolbar';
+import MemeViewer from './components/MemeViewer';
 
 const starterTasks = [
   { id: 1, name: 'Revisar el backlog del equipo', active: true, deleted: false },
@@ -13,6 +14,7 @@ function App() {
   const [tasks, setTasks] = useState(starterTasks);
   const [filter, setFilter] = useState('active');
   const [editingTask, setEditingTask] = useState(null);
+  const [view, setView] = useState('tasks');
   const activeCount = tasks.filter((task) => !task.deleted && task.active).length;
   const deletedCount = tasks.filter((task) => task.deleted).length;
 
@@ -40,14 +42,24 @@ function App() {
         <h1>Haz espacio<br />para lo que <em>importa.</em></h1>
         <div className="summary"><strong>{activeCount}</strong> tareas activas<br />en tu lista de hoy</div>
       </section>
-      <section className="workspace">
-        <TaskForm editingTask={editingTask} onSave={addOrUpdate} onCancel={() => setEditingTask(null)} />
-        <div>
-          <TaskToolbar filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} />
-          <TaskList tasks={tasks} filter={filter} handlers={handlers} />
-          <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
-        </div>
-      </section>
+      <div className="view-tabs" role="tablist" aria-label="Secciones">
+        <button className={`tab ${view === 'tasks' ? 'active' : ''}`} type="button" onClick={() => setView('tasks')}>
+          Tareas
+        </button>
+        <button className={`tab ${view === 'meme' ? 'active' : ''}`} type="button" onClick={() => setView('meme')}>
+          Meme
+        </button>
+      </div>
+      {view === 'tasks' ? (
+        <section className="workspace">
+          <TaskForm editingTask={editingTask} onSave={addOrUpdate} onCancel={() => setEditingTask(null)} />
+          <div>
+            <TaskToolbar filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} />
+            <TaskList tasks={tasks} filter={filter} handlers={handlers} />
+            <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
+          </div>
+        </section>
+      ) : <MemeViewer />}
     </main>
   );
 }
