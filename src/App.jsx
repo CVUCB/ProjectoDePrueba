@@ -43,15 +43,15 @@ function App() {
         <div className="summary"><strong>{activeCount}</strong> tareas activas<br />en tu lista de hoy</div>
       </section>
       <div className="view-tabs" role="tablist" aria-label="Secciones">
-        <button className={`tab ${view === 'tasks' ? 'active' : ''}`} type="button" onClick={() => setView('tasks')}>
+        <button id="tasks-tab" className={`tab ${view === 'tasks' ? 'active' : ''}`} type="button" role="tab" aria-selected={view === 'tasks'} aria-controls="tasks-panel" onClick={() => setView('tasks')}>
           Tareas
         </button>
-        <button className={`tab ${view === 'meme' ? 'active' : ''}`} type="button" onClick={() => setView('meme')}>
+        <button id="meme-tab" className={`tab ${view === 'meme' ? 'active' : ''}`} type="button" role="tab" aria-selected={view === 'meme'} aria-controls="meme-panel" onClick={() => setView('meme')}>
           Meme
         </button>
       </div>
       {view === 'tasks' ? (
-        <section className="workspace">
+        <section id="tasks-panel" className="workspace" role="tabpanel" aria-labelledby="tasks-tab">
           <TaskForm editingTask={editingTask} onSave={addOrUpdate} onCancel={() => setEditingTask(null)} />
           <div>
             <TaskToolbar filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} />
@@ -59,7 +59,11 @@ function App() {
             <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
           </div>
         </section>
-      ) : <MemeViewer />}
+      ) : (
+        <div id="meme-panel" role="tabpanel" aria-labelledby="meme-tab">
+          <MemeViewer />
+        </div>
+      )}
     </main>
   );
 }

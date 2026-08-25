@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const MEME_API_URL = 'https://meme-api.com/gimme';
 
@@ -6,23 +6,49 @@ function MemeViewer() {
   const [meme, setMeme] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const mountedRef = useRef(false);
+  const requestControllerRef = useRef(null);
 
   async function loadMeme() {
+    requestControllerRef.current?.abort();
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
     setLoading(true);
     setError('');
+    setMeme(null);
     try {
-      const response = await fetch(MEME_API_URL);
-      setMeme(await response.json());
-    } catch {
-      setError('No pudimos cargar un meme. Inténtalo de nuevo.');
+      const response = await fetch(MEME_API_URL, { signal: controller.signal });
+      if (!response.ok) throw new Error('No se pudo obtener el meme');
+      const data = await response.json();
+      if (!data?.url || !data?.title || !data?.postLink) throw new Error('La respuesta no tiene un formato válido');
+      if (mountedRef.current && requestControllerRef.current === controller) setMeme(data);
+    } catch (requestError) {
+      if (requestError.name !== 'AbortError' && mountedRef.current && requestControllerRef.current === controller) {
+        setError('No pudimos cargar un meme. Inténtalo de nuevo.');
+      }
     } finally {
-      setLoading(false);
+      if (mountedRef.current && requestControllerRef.current === controller) {
+        requestControllerRef.current = null;
+        setLoading(false);
+      }
     }
   }
 
   useEffect(() => {
-    loadMeme();
-    setInterval(loadMeme, 30000);
+    mountedRef.current = true;
+    let timeoutId;
+
+    async function refreshMeme() {
+      await loadMeme();
+      if (mountedRef.current) timeoutId = setTimeout(refreshMeme, 30000);
+    }
+
+    refreshMeme();
+    return () => {
+      mountedRef.current = false;
+      clearTimeout(timeoutId);
+      requestControllerRef.current?.abort();
+    };
   }, []);
 
   return (
