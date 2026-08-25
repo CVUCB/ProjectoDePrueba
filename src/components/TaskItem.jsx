@@ -1,4 +1,10 @@
 function TaskItem({ task, onToggle, onEdit, onDelete, onRestore }) {
+  const priorityLabel = {
+    baja: 'Baja',
+    media: 'Media',
+    alta: 'Alta',
+  };
+
   return (
     <article className={`task ${task.active ? '' : 'is-done'}`}>
       {!task.deleted && (
@@ -6,7 +12,14 @@ function TaskItem({ task, onToggle, onEdit, onDelete, onRestore }) {
           {task.active ? '' : '✓'}
         </button>
       )}
-      <span className="task-name">{task.name}</span>
+
+      <div className="task-content">
+        <span className="task-name">{task.name}</span>
+        <span className={`priority-badge priority-${task.priority || 'media'}`}>
+          {priorityLabel[task.priority] || 'Media'}
+        </span>
+      </div>
+
       <div className="task-actions">
         {task.deleted ? (
           <button className="icon-btn" onClick={() => onRestore(task.id)}>Restaurar</button>

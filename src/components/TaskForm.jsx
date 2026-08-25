@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 
 function TaskForm({ editingTask, onSave, onCancel }) {
   const [name, setName] = useState(editingTask?.name ?? '');
+  const [priority, setPriority] = useState(editingTask?.priority ?? 'media');
 
   useEffect(() => {
     setName(editingTask?.name ?? '');
+    setPriority(editingTask?.priority ?? 'media');
   }, [editingTask]);
 
   function submit(event) {
     event.preventDefault();
     const cleanName = name.trim();
-    if (cleanName) onSave(cleanName);
+    if (cleanName) onSave(cleanName, priority);
   }
 
   return (
@@ -27,6 +29,18 @@ function TaskForm({ editingTask, onSave, onCancel }) {
         placeholder="Ej. Diseñar el flujo de inicio"
         autoFocus
       />
+
+      <label htmlFor="task-priority">Prioridad</label>
+      <select
+        id="task-priority"
+        value={priority}
+        onChange={(event) => setPriority(event.target.value)}
+      >
+        <option value="baja">Baja</option>
+        <option value="media">Media</option>
+        <option value="alta">Alta</option>
+      </select>
+
       <button className="primary" type="submit">
         {editingTask ? 'Guardar cambios' : 'Añadir tarea'} <span aria-hidden="true">↗</span>
       </button>
