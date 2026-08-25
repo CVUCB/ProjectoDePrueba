@@ -37,7 +37,7 @@ function App() {
         <div className="date">Gestión personal / 2026</div>
       </header>
       <section className="intro">
-        <h1>Haz espacio<br />para lo que <em>importa.</em></h1>
+        <h1 className="hero-title">Haz espacio<br />para lo que <em>importa.</em></h1>
         <div className="summary"><strong>{activeCount}</strong> tareas activas<br />en tu lista de hoy</div>
       </section>
       <section className="workspace">
