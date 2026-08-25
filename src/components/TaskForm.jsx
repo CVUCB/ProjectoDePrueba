@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 
 function TaskForm({ editingTask, onSave, onCancel }) {
   const [name, setName] = useState(editingTask?.name ?? '');
+  const [deadline, setDeadline] = useState(editingTask?.deadline ?? '');
 
   useEffect(() => {
     setName(editingTask?.name ?? '');
+    setDeadline(editingTask?.deadline ?? '');
   }, [editingTask]);
 
   function submit(event) {
     event.preventDefault();
     const cleanName = name.trim();
-    if (cleanName) onSave(cleanName);
+    if (cleanName) onSave(cleanName, deadline);
   }
 
   return (
@@ -26,6 +28,13 @@ function TaskForm({ editingTask, onSave, onCancel }) {
         onChange={(event) => setName(event.target.value)}
         placeholder="Ej. Diseñar el flujo de inicio"
         autoFocus
+      />
+      <label htmlFor="task-deadline">Fecha límite</label>
+      <input
+        id="task-deadline"
+        type="date"
+        value={deadline}
+        onChange={(event) => setDeadline(event.target.value)}
       />
       <button className="primary" type="submit">
         {editingTask ? 'Guardar cambios' : 'Añadir tarea'} <span aria-hidden="true">↗</span>

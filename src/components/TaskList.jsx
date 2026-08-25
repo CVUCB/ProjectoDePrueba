@@ -1,6 +1,6 @@
 import TaskItem from './TaskItem';
 
-function TaskList({ tasks, filter, handlers }) {
+function TaskList({ tasks, filter, handlers, getRemainingTime }) {
   const visibleTasks = tasks.filter((task) => (filter === 'deleted' ? task.deleted : !task.deleted));
 
   if (!visibleTasks.length) {
@@ -14,7 +14,7 @@ function TaskList({ tasks, filter, handlers }) {
 
   return (
     <div className="tasks">
-      {visibleTasks.map((task) => <TaskItem key={task.id} task={task} {...handlers} />)}
+      {visibleTasks.map((task) => <TaskItem key={task.id} task={task} getRemainingTime={getRemainingTime} {...handlers} />)}
     </div>
   );
 }
