@@ -18,13 +18,7 @@ function App() {
 
   function addOrUpdate(name, deadline) {
     setTasks((current) => editingTask
-      ? current.map((task) => {
-        if (task.id === editingTask.id) {
-          task.name = name;
-          task.deadline = deadline;
-        }
-        return task;
-      })
+      ? current.map((task) => (task.id === editingTask.id ? { ...task, name, deadline } : task))
       : [...current, { id: Date.now(), name, active: true, deleted: false, deadline }]);
     setEditingTask(null);
   }
@@ -34,9 +28,14 @@ function App() {
 
     const now = new Date();
     const end = new Date(task.deadline + 'T23:59:59');
+
+    if (Number.isNaN(end.getTime())) {
+      return 'Fecha límite inválida';
+    }
+
     const diffMs = end.getTime() - now.getTime();
     const dayMs = 24 * 60 * 60 * 1000;
-    const days = Math.ceil(diffMs / dayMs);
+    const days = Math.floor(diffMs / dayMs);
 
     if (days < 0) return `Vencida hace ${Math.abs(days)} día(s)`;
     if (days === 0) return 'Vence hoy';
@@ -44,19 +43,16 @@ function App() {
   }
 
   const handlers = {
-    onToggle: (id) => setTasks((current) => current.map((task) => {
-      if (task.id === id) task.active = !task.active;
-      return task;
-    })),
+    onToggle: (id) => setTasks((current) => current.map((task) => (
+      task.id === id ? { ...task, active: !task.active } : task
+    ))),
     onEdit: setEditingTask,
-    onDelete: (id) => setTasks((current) => current.map((task) => {
-      if (task.id === id) task.deleted = true;
-      return task;
-    })),
-    onRestore: (id) => setTasks((current) => current.map((task) => {
-      if (task.id === id) task.deleted = false;
-      return task;
-    })),
+    onDelete: (id) => setTasks((current) => current.map((task) => (
+      task.id === id ? { ...task, deleted: true } : task
+    ))),
+    onRestore: (id) => setTasks((current) => current.map((task) => (
+      task.id === id ? { ...task, deleted: false } : task
+    ))),
   };
 
   return (

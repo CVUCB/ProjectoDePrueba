@@ -14,7 +14,7 @@ function TaskList({ tasks, filter, handlers, getRemainingTime }) {
 
   return (
     <div className="tasks">
-      {visibleTasks.map((task, index) => <TaskItem key={index} task={task} getRemainingTime={getRemainingTime} {...handlers} />)}
+      {visibleTasks.map((task) => <TaskItem key={task.id} task={task} getRemainingTime={getRemainingTime} {...handlers} />)}
     </div>
   );
 }
