@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem';
 
 function TaskList({ tasks, filter, handlers }) {
-  const visibleTasks = tasks.filter((task) => (filter === 'deleted' ? task.deleted : !task.deleted && task.active));
+  const visibleTasks = tasks.filter((task) => (filter === 'deleted' ? task.deleted : !task.deleted));
 
   if (!visibleTasks.length) {
     return (
