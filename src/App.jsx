@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskToolbar from './components/TaskToolbar';
+import AntipatternPanel from './components/AntipatternPanel';
 
 const starterTasks = [
   { id: 1, name: 'Revisar el backlog del equipo', active: true, deleted: false },
@@ -48,6 +49,7 @@ function App() {
           <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
         </div>
       </section>
+      <AntipatternPanel />
     </main>
   );
 }

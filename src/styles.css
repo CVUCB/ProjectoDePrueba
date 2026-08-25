@@ -47,5 +47,33 @@ input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(21,94,99,.12
 .empty { border: 1px dashed #b9c9bc; padding: 44px 20px; text-align: center; color: var(--muted); }
 .empty strong { display: block; color: var(--ink); margin-bottom: 6px; }
 .meta { margin-top: 18px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: .7rem; }
+.antipattern-area { margin-top: 78px; padding-top: 28px; border-top: 2px solid var(--ink); }
+.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; }
+.eyebrow, .list-label { margin: 0 0 10px; color: var(--teal); font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
+.section-heading h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.5rem); line-height: .95; letter-spacing: -.06em; }
+.finding-count { color: var(--muted); font-size: .82rem; text-align: right; }
+.finding-count strong { display: block; color: var(--coral); font-size: 2rem; line-height: 1; }
+.section-note { max-width: 560px; margin: 16px 0 28px; color: var(--muted); line-height: 1.45; }
+.antipattern-grid { display: grid; grid-template-columns: minmax(260px, 310px) 1fr; gap: 42px; align-items: start; }
+.finding-form { display: grid; gap: 12px; }
+textarea, select { width: 100%; border: 1px solid var(--line); background: #fbfcfa; color: var(--ink); padding: 13px 14px; outline: none; resize: vertical; }
+textarea:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(21,94,99,.12); }
+.form-row { display: grid; grid-template-columns: 1fr 100px; gap: 10px; }
+.form-row > div { display: grid; gap: 12px; }
+.finding-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 18px; }
+.finding-toolbar .list-label { margin: 0; color: var(--ink); }
+.finding-list { display: grid; gap: 10px; }
+.finding { position: relative; border: 1px solid var(--line); border-left: 4px solid var(--teal); background: white; padding: 16px 18px; animation: rise .35s both; }
+.finding.severity-alta { border-left-color: var(--coral); }
+.finding.severity-baja { border-left-color: var(--lime); }
+.finding-topline { display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+.severity { color: var(--coral); font-family: 'DM Mono', monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; }
+.severity-media .severity { color: var(--teal); }
+.severity-baja .severity { color: #66813b; }
+.finding-location { color: var(--muted); font-family: 'DM Mono', monospace; font-size: .68rem; overflow-wrap: anywhere; text-align: right; }
+.finding h3 { margin: 12px 0 5px; font-size: 1.05rem; }
+.finding p { margin: 0 0 14px; color: var(--muted); font-size: .86rem; line-height: 1.4; }
+.status { border: 0; padding: 7px 10px; background: var(--paper); color: var(--ink); font-size: .72rem; }
+.status:hover, .status.is-reviewed { background: var(--lime); }
 @keyframes rise { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 760px) { .shell { width: min(100% - 28px, 600px); padding-top: 22px; } header { margin-bottom: 34px; } .date { display: none; } .intro { grid-template-columns: 1fr; gap: 22px; } .summary { width: 100%; padding: 12px 0 0 14px; } .summary strong { display: inline; margin-right: 8px; } .workspace { grid-template-columns: 1fr; gap: 25px; } .panel { padding: 18px; } }
+@media (max-width: 760px) { .shell { width: min(100% - 28px, 600px); padding-top: 22px; } header { margin-bottom: 34px; } .date { display: none; } .intro { grid-template-columns: 1fr; gap: 22px; } .summary { width: 100%; padding: 12px 0 0 14px; } .summary strong { display: inline; margin-right: 8px; } .workspace, .antipattern-grid { grid-template-columns: 1fr; gap: 25px; } .panel { padding: 18px; } .antipattern-area { margin-top: 52px; } .section-heading, .finding-toolbar { align-items: flex-start; flex-direction: column; } .finding-count { text-align: left; } .finding-count strong { display: inline; margin-right: 7px; } .form-row { grid-template-columns: 1fr; } }
