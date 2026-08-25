@@ -4,9 +4,9 @@ import TaskList from './components/TaskList';
 import TaskToolbar from './components/TaskToolbar';
 
 const starterTasks = [
-  { id: 1, name: 'Revisar el backlog del equipo', active: true, deleted: false },
-  { id: 2, name: 'Preparar notas para la reunión', active: false, deleted: false },
-  { id: 3, name: 'Actualizar documentación del proyecto', active: true, deleted: false },
+  { id: 1, name: 'Revisar el backlog del equipo', active: true, deleted: false, deadline: '2026-08-26' },
+  { id: 2, name: 'Preparar notas para la reunión', active: false, deleted: false, deadline: '2026-08-25' },
+  { id: 3, name: 'Actualizar documentación del proyecto', active: true, deleted: false, deadline: '' },
 ];
 
 function App() {
@@ -16,18 +16,47 @@ function App() {
   const activeCount = tasks.filter((task) => !task.deleted && task.active).length;
   const deletedCount = tasks.filter((task) => task.deleted).length;
 
-  function addOrUpdate(name) {
+  function addOrUpdate(name, deadline) {
     setTasks((current) => editingTask
-      ? current.map((task) => task.id === editingTask.id ? { ...task, name } : task)
-      : [...current, { id: Date.now(), name, active: true, deleted: false }]);
+      ? current.map((task) => {
+        if (task.id === editingTask.id) {
+          task.name = name;
+          task.deadline = deadline;
+        }
+        return task;
+      })
+      : [...current, { id: Date.now(), name, active: true, deleted: false, deadline }]);
     setEditingTask(null);
   }
 
+  function getRemainingTime(task) {
+    if (!task.deadline) return 'Sin fecha límite';
+
+    const now = new Date();
+    const end = new Date(task.deadline + 'T23:59:59');
+    const diffMs = end.getTime() - now.getTime();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const days = Math.ceil(diffMs / dayMs);
+
+    if (days < 0) return `Vencida hace ${Math.abs(days)} día(s)`;
+    if (days === 0) return 'Vence hoy';
+    return `Faltan ${days} día(s)`;
+  }
+
   const handlers = {
-    onToggle: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, active: !task.active } : task)),
+    onToggle: (id) => setTasks((current) => current.map((task) => {
+      if (task.id === id) task.active = !task.active;
+      return task;
+    })),
     onEdit: setEditingTask,
-    onDelete: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, deleted: true } : task)),
-    onRestore: (id) => setTasks((current) => current.map((task) => task.id === id ? { ...task, deleted: false } : task)),
+    onDelete: (id) => setTasks((current) => current.map((task) => {
+      if (task.id === id) task.deleted = true;
+      return task;
+    })),
+    onRestore: (id) => setTasks((current) => current.map((task) => {
+      if (task.id === id) task.deleted = false;
+      return task;
+    })),
   };
 
   return (
@@ -44,7 +73,7 @@ function App() {
         <TaskForm editingTask={editingTask} onSave={addOrUpdate} onCancel={() => setEditingTask(null)} />
         <div>
           <TaskToolbar filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} />
-          <TaskList tasks={tasks} filter={filter} handlers={handlers} />
+          <TaskList tasks={tasks} filter={filter} handlers={handlers} getRemainingTime={getRemainingTime} />
           <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
         </div>
       </section>

@@ -1,4 +1,6 @@
-function TaskItem({ task, onToggle, onEdit, onDelete, onRestore }) {
+function TaskItem({ task, onToggle, onEdit, onDelete, onRestore, getRemainingTime }) {
+  const x = task.deadline ? new Date(task.deadline + 'T00:00:00').toLocaleDateString('es-CO') : 'Sin fecha';
+
   return (
     <article className={`task ${task.active ? '' : 'is-done'}`}>
       {!task.deleted && (
@@ -6,7 +8,11 @@ function TaskItem({ task, onToggle, onEdit, onDelete, onRestore }) {
           {task.active ? '' : '✓'}
         </button>
       )}
-      <span className="task-name">{task.name}</span>
+      <span className="task-name">
+        {task.name}
+        <small className="task-deadline">Límite: {x}</small>
+        <small className="task-remaining">{getRemainingTime(task)}</small>
+      </span>
       <div className="task-actions">
         {task.deleted ? (
           <button className="icon-btn" onClick={() => onRestore(task.id)}>Restaurar</button>
