@@ -1,7 +1,11 @@
 import TaskItem from './TaskItem';
 
-function TaskList({ tasks, filter, handlers }) {
-  const visibleTasks = tasks.filter((task) => (filter === 'deleted' ? task.deleted : !task.deleted));
+function TaskList({ tasks, filter, contextFilter, handlers }) {
+  const visibleTasks = tasks.filter((task) => {
+    const matchesFilter = filter === 'deleted' ? task.deleted : !task.deleted;
+    const matchesContext = contextFilter === 'all' || task.context === contextFilter;
+    return matchesFilter && matchesContext;
+  });
 
   if (!visibleTasks.length) {
     return (
