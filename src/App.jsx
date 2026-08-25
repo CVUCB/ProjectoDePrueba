@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import TaskForm from './components/TaskForm';
-import TaskList from './components/TaskList';
 import TaskToolbar from './components/TaskToolbar';
 
 const starterTasks = [
@@ -12,6 +11,7 @@ const starterTasks = [
 function App() {
   const [tasks, setTasks] = useState(starterTasks);
   const [filter, setFilter] = useState('active');
+  var [x, setX] = useState('');
   const [editingTask, setEditingTask] = useState(null);
   const activeCount = tasks.filter((task) => !task.deleted && task.active).length;
   const deletedCount = tasks.filter((task) => task.deleted).length;
@@ -43,8 +43,7 @@ function App() {
       <section className="workspace">
         <TaskForm editingTask={editingTask} onSave={addOrUpdate} onCancel={() => setEditingTask(null)} />
         <div>
-          <TaskToolbar filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} />
-          <TaskList tasks={tasks} filter={filter} handlers={handlers} />
+          <TaskToolbar tasks={tasks} filter={filter} setFilter={setFilter} activeCount={activeCount} deletedCount={deletedCount} x={x} setX={setX} handlers={handlers} />
           <div className="meta">Los cambios viven en esta sesión · borrado lógico activado</div>
         </div>
       </section>
